@@ -28,30 +28,49 @@ This repository is dedicated exclusively to hosting cryptographically authentica
 
 All native engine bundles are designed for zero-configuration, tokenless deployment on any Android device running Termux ARM64.
 
-### Step 1: Install Python Orchestration Runtime
+### Option A: Python Orchestration Runtime (PIP)
 ```bash
 # Direct install from public release wheel (No GitHub token required)
-pip install --upgrade "https://github.com/uno-km/ameva-runtime-releases/releases/latest/download/ameva_runtime-2.7.2-py3-none-any.whl"
+pip install --upgrade "https://github.com/uno-km/ameva-runtime-releases/releases/latest/download/ameva_runtime-2.7.3-py3-none-any.whl"
+
+# Or standard PyPI install
+pip install ameva-runtime
+```
+
+### Option B: Node.js & TypeScript Runtime (NPM)
+```bash
+# Install NPM package
+npm install @ameva/runtime
+
+# Or global CLI access
+npm install -g @ameva/runtime
 ```
 
 ### Step 2: 1-Click Engine Auto-Provisioning
 The `NativeAssetManager` inside `ameva` automatically downloads the latest prebuilt binaries from this registry, validates their SHA-256 checksums, and establishes atomic symlinks in `$PREFIX/bin`:
 
 ```bash
-# Provision all hardware engines at once
+# Python CLI: Provision all hardware engines at once
 ameva install --all
 
+# Or NPM CLI: Provision via npx
+npx ameva install --all
+
 # Or provision a specific modality individually
-ameva install --modality diffusion   # Installs sd-cli-vulkan (108MB) -> $PREFIX/bin/sd-cli
-ameva install --modality stt         # Installs whisper-cli-vulkan -> $PREFIX/bin/whisper-cli
+ameva install --modality diffusion   # Installs sd-cli-vulkan -> $PREFIX/bin/sd-cli
+npx ameva install --modality stt     # Installs whisper-cli-vulkan -> $PREFIX/bin/whisper-cli
 ameva install --modality llm         # Installs llama-cli-vulkan -> $PREFIX/bin/llama-cli
 ameva install --modality tts         # Installs sherpa-ncnn-offline-tts
-ameva install --modality bitnet      # Installs termux-bitnet-cli
+npx ameva install --modality bitnet  # Installs termux-bitnet-cli
 ```
 
 ### Step 3: Run 12-Stage Hardware Diagnostic
 ```bash
+# Python CLI
 ameva doctor
+
+# NPM CLI
+npx ameva doctor
 ```
 Verifies silicon topology, CPU core affinity, GPU kernel nodes (`/dev/kgsl-3d0`, `/dev/mali0`), Vulkan ICD loader chain, and asynchronous compute queue capabilities.
 
